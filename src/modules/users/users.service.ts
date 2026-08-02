@@ -57,16 +57,15 @@ export class UsersService {
         return await this.userRepository.save(user);
     }
 
-    async remove(id: string): Promise<User> {
-        const user = await this.userRepository.findOne({ where: { id } });
+   async delete(id: string): Promise<User | null> {
+        const user = await this.findOne(id);
 
-        if(!user) {
-            throw new NotFoundException('User with id ${id} not found')
-        }
+        await this.userRepository.delete(id);
 
-        await this.userRepository.remove;
         return user;
     }
+
+
       
       
 

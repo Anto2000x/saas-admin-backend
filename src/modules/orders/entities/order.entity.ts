@@ -2,7 +2,7 @@ import { User } from "src/modules/users/entities/user.entity";
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { OrderStatus } from "./order.status.enum";
 
-@Entity('users')
+@Entity('orders')
 export class Order{
 
     @PrimaryGeneratedColumn('uuid')
