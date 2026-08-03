@@ -10,12 +10,19 @@ import { UsersModule } from './modules/users/users.module';
 import { ProductsModule } from './modules/products/products.module';
 import { OrdersModule } from './modules/orders/orders.module';
 
-import { User } from './modules/users/entities/user.entity';
 import { Product } from './modules/products/entities/product.entity';
 import { Order } from './modules/orders/entities/order.entity';
+import { OrderItem } from './modules/orders/entities/order-item.entity';
+import { User } from './modules/users/entities/user.entity';
 
 @Module({
-  imports: [ ConfigModule.forRoot({isGlobal: true,}),
+  imports: [ ConfigModule.forRoot({
+    isGlobal: true,
+    envFilePath: [
+      '.env',
+      'C:/Users/anton/Desktop/saas-admin-backend/.env'
+    ],
+  }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.DB_HOST,
@@ -23,7 +30,7 @@ import { Order } from './modules/orders/entities/order.entity';
       username: process.env.DB_USER,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_NAME,
-      entities: [User, Product, Order],
+      entities: [User, Product, Order, OrderItem],
       synchronize: true,
     }),
 

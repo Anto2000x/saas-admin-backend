@@ -26,6 +26,11 @@ export class UsersService {
         });
     }
 
+    findByEmail(email: string){
+        return this.userRepository.findOne({ where: {email} });
+    }
+
+
     async findOne(id: string):Promise<User | null>{
         const user = await this.userRepository.findOne({ where: {id},});
 
@@ -36,25 +41,19 @@ export class UsersService {
         return user;
     }
 
-    async create(dto: CreateUserDto):Promise<User> {
-        const exists = await this.userRepository.findOne({ where: {email: dto.email}});
-
-        if (exists){
-            throw new BadRequestException('Email already in use');
-        }
-        const user = this.userRepository.create(dto);
-        return await this.userRepository.save(user);
+    async create(data: Partial<User>) {
+        const user = this.userRepository.create(data);
+        return this.userRepository.save(user);   
     }
 
-    async update(id: string, dto: UpdateUserDto):Promise<User> {
-        const user = await this.userRepository.findOne({where: {id}});
-
-        if(!user) {
-           throw new NotFoundException('User with id ${id} not found')
+    async update(id: string, data: Partial<User>): Promise<User> {
+        const user = await this.findOne(id);
+        if (!user) {
+        throw new NotFoundException(`User with id ${id} not found`);
         }
 
-        Object.assign(user, dto);
-        return await this.userRepository.save(user);
+        Object.assign(user, data);
+        return this.userRepository.save(user);
     }
 
    async delete(id: string): Promise<User | null> {

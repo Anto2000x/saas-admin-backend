@@ -1,22 +1,30 @@
-import { User } from "src/modules/users/entities/user.entity";
-import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { OrderStatus } from "./order.status.enum";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany, CreateDateColumn } from 'typeorm';
+import { OrderItem } from './order-item.entity';
+import { OrderStatus } from './order.status.enum';
 
-@Entity('orders')
-export class Order{
+@Entity()
+export class Order {
+  @PrimaryGeneratedColumn('uuid')
+  id!: string;
 
-    @PrimaryGeneratedColumn('uuid')
-    id!: string;
+  @Column()
+  userId!: string;
 
-    @Column('decimal')
-    total!: number;
-    
-    @Column({ type: 'enum', enum : OrderStatus })
-    status!: OrderStatus;
+  @OneToMany(() => OrderItem, item => item.order, {
+    cascade: true,
+  })
+  items!: OrderItem[];
 
-    @CreateDateColumn()
-    created_at!: Date;
+  @Column()
+  total!: number;
 
-    @ManyToOne(() => User)
-    user!: User;
+  @Column({
+    type: 'enum',
+    enum: OrderStatus,
+    default: OrderStatus.PENDING,
+  })
+  status!: OrderStatus;
+
+  @CreateDateColumn()
+  created_at!: Date;
 }

@@ -1,4 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryGeneratedColumn } from 'typeorm';
+
+import { OrderItem } from 'src/modules/orders/entities/order-item.entity';
+import { Column, CreateDateColumn, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity('products')
 export class Product {
@@ -16,4 +18,7 @@ export class Product {
 
   @CreateDateColumn()
   created_at!: Date;
+
+  @OneToMany(() => OrderItem, item => item.product)
+  orderItems!: OrderItem[]
 }
